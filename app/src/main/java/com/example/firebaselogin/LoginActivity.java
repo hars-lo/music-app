@@ -15,7 +15,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
     Button loginButton;
-    TextView loginRedirectText; // ✅ Use the correct ID from XML
+    TextView loginRedirectText;
     ImageView googleSignInIcon;
     FirebaseAuth auth;
     GoogleSignInClient googleSignInClient;
@@ -29,14 +29,12 @@ public class LoginActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        // Find views
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
-        loginRedirectText = findViewById(R.id.loginRedirectText); // ✅ Correct ID
+        loginRedirectText = findViewById(R.id.loginRedirectText);
         googleSignInIcon = findViewById(R.id.google_signin_icon);
 
-        // Email/Password login
         loginButton.setOnClickListener(v -> {
             String email = loginEmail.getText().toString().trim();
             String password = loginPassword.getText().toString().trim();
@@ -49,21 +47,35 @@ public class LoginActivity extends AppCompatActivity {
             auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
+                            FirebaseUser currentUser = auth.getCurrentUser();
+                            if (currentUser != null) {
+                                // Check if the user is newly signed up or existing user
+                                if (currentUser.getMetadata().getCreationTimestamp() == currentUser.getMetadata().getLastSignInTimestamp()) {
+                                    // Newly signed-up user: ask for email verification
+                                    if (currentUser.isEmailVerified()) {
+                                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Please verify your email first.", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    // Existing user: proceed without checking email verification
+                                    Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    finish();
+                                }
+                            }
                         } else {
                             Toast.makeText(LoginActivity.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         });
 
-        // Redirect to signup
         loginRedirectText.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, SignupActivity.class));
         });
 
-        // Google Sign-In setup
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()

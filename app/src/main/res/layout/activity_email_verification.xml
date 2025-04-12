@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/black">
+    <TextView
+        android:id="@+id/verification_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify Your Email"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp" />
+    <TextView
+        android:id="@+id/verification_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A verification email has been sent to your inbox."
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginBottom="30dp" />
+
+    <Button
+        android:id="@+id/check_verification_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify your Email-ID"
+        android:backgroundTint="@color/spotify_green"
+        android:textColor="@android:color/black"
+        android:padding="12dp" />
+
+
+
+    <!-- Progress spinner (hidden by default) -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_marginTop="30dp" />
+
+    <!-- Tick mark (hidden by default) -->
+    <ImageView
+        android:id="@+id/verified_tick"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_verified"
+        android:layout_marginTop="30dp"
+        android:contentDescription="Verified Tick"
+        android:visibility="gone" />
+</LinearLayout>
