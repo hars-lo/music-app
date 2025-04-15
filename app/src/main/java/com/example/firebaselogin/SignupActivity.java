@@ -17,7 +17,7 @@ import com.google.firebase.auth.*;
 
 public class SignupActivity extends AppCompatActivity {
 
-    EditText signupName, signupEmail, signupUsername, signupPassword;
+    EditText signupName, signupEmail, signupUsername, signupPassword, signupConfirmPassword;
     TextView loginRedirectText;
     Button signupButton;
     ImageView googleSignInIcon;
@@ -39,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
         signupEmail = findViewById(R.id.signup_email);
         signupUsername = findViewById(R.id.signup_username);
         signupPassword = findViewById(R.id.signup_password);
+        signupConfirmPassword = findViewById(R.id.signup_confirm_password);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
         googleSignInIcon = findViewById(R.id.google_signin_icon);
@@ -46,9 +47,16 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setOnClickListener(v -> {
             String email = signupEmail.getText().toString().trim();
             String password = signupPassword.getText().toString().trim();
+            String confirmPassword = signupConfirmPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(SignupActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!password.equals(confirmPassword)) {
+                signupConfirmPassword.setError("Passwords do not match");
+                signupConfirmPassword.requestFocus();
                 return;
             }
 
